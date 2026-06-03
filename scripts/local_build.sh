@@ -2,7 +2,7 @@
 
 export set=false
 export IMG_NAME="ros_humble_base_image"
-export REGISTRY="registry.screamtrumpet.csie.ncku.edu.tw/pochun"
+export REGISTRY="ghcr.io/screamlab"
 export TODAY=$(date +%Y%m%d)
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
