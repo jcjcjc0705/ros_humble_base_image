@@ -43,4 +43,4 @@ bash scripts/local_buildx_push.sh -t 1.0.0
 
 ## CI/CD
 
-Pushing a tag to this repository will trigger GitLab CI to automatically build and push a multi-platform image (amd64 + arm64).
+Pushing a tag to this repository triggers GitLab CI to build amd64 and arm64 natively on separate runners, then combine them into one multi-arch manifest and push it under both the tag name and `latest`.
