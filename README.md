@@ -25,6 +25,16 @@ ghcr.io/jcjcjc0705/ros_humble_base_image:latest
 | `m` | `make -j` |
 | `l` | `ls -lash` |
 
+## Environment
+
+Every shell gets its ROS environment from the top of `/root/.bashrc`: the container's main process (the entrypoint sources that file) and `docker exec -it <container> bash` alike. In order:
+
+1. `/opt/ros/$ROS_DISTRO/setup.bash`
+2. `$ROS_UNDERLAY/setup.bash`, if a derived image sets `ROS_UNDERLAY` (`ros2_control_image` sets it to `/opt/ros2_control_ws/install`)
+3. `$ROS2_WS/install/setup.bash`, i.e. `/workspaces`, once something has been built there (`r`)
+
+A derived image that builds its own packages outside `/workspaces` only needs `ENV ROS_UNDERLAY=<its install directory>`, not an entrypoint of its own.
+
 ## Run
 
 ```bash
@@ -55,3 +65,11 @@ There are two ways to publish:
   ```
 
 - **Run it from the Actions tab**: *Build and publish Docker image* → *Run workflow*, then enter a version and choose whether to also tag it `latest`. It builds the branch or tag picked under *Use workflow from* and doesn't create a git tag.
+
+## Troubleshooting
+
+A non-interactive `docker exec <container> bash -c '...'` doesn't read `.bashrc`, so `ros2` isn't on the `PATH` there. Run it through the entrypoint instead:
+
+```bash
+docker exec <container> /ros_entrypoint.bash bash -c 'ros2 topic list'
+```
