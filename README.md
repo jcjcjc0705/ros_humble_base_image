@@ -5,7 +5,7 @@ A personal Docker base image built on top of `ros:humble-ros-core-jammy` (Ubuntu
 ## Image
 
 ```
-registry.screamtrumpet.csie.ncku.edu.tw/pochun/ros_humble_base_image:latest
+ghcr.io/jcjcjc0705/ros_humble_base_image:latest
 ```
 
 ## What's Included
@@ -28,7 +28,7 @@ registry.screamtrumpet.csie.ncku.edu.tw/pochun/ros_humble_base_image:latest
 ## Run
 
 ```bash
-docker run -it --rm registry.screamtrumpet.csie.ncku.edu.tw/pochun/ros_humble_base_image:latest
+docker run -it --rm ghcr.io/jcjcjc0705/ros_humble_base_image:latest
 ```
 
 ## Build Locally
@@ -43,4 +43,15 @@ bash scripts/local_buildx_push.sh -t 1.0.0
 
 ## CI/CD
 
-Pushing a tag to this repository triggers GitLab CI to build amd64 and arm64 natively on separate runners, then combine them into one multi-arch manifest and push it under both the tag name and `latest`.
+Builds run on GitHub Actions ([`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml)).
+
+Pushing a tag builds amd64 (`ubuntu-24.04`) and arm64 (`ubuntu-24.04-arm`) natively on separate runners, then combines them into one multi-arch manifest and pushes it to GHCR under both the tag name and `latest`:
+
+```bash
+git tag 0.2.0
+git push origin 0.2.0
+```
+
+You can also start a build from the **Actions** tab (*Run workflow*). A manual run on a branch only publishes `sha-<short commit>`, so `latest` doesn't move.
+
+The image goes to `ghcr.io/<repo owner>/ros_humble_base_image`, using the built-in `GITHUB_TOKEN`, so no secrets are needed.
